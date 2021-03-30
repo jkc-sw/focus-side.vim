@@ -7,7 +7,7 @@ func! focus_side#focusSide(...)
     let buffers_orig = tabpagebuflist()
     let curr_buffer = bufnr()
     let right_width = float2nr(floor(g:focus_side_ratio*str2float(&columns)))
-    let right_height = &lines - &cmdheight - 1
+    let right_height = &lines - &cmdheight - 1 - ((tabpagenr('$') > 1) ? 1 : 0)
     let curr_width = winwidth(0)
     let curr_height = winheight(0)
 
