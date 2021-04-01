@@ -37,3 +37,25 @@ endfunc
 func! focus_side#utils#resize_active_window(width)
     silent exec 'vertical resize '.a:width
 endfunc
+
+func! focus_side#utils#target_offset_active_window()
+    let screen_width = str2float(&columns)
+    let screen_height = &lines - &cmdheight - 1 - ((tabpagenr('$') > 1) ? 1 : 0)
+    let screen_center = float2nr(screen_width / 2.0)
+
+    let curr_vis_line_start = line('w0')
+    let curr_vis_line_end = line('w$')
+
+    let sum = 0.0
+    let non_empty_nlines = 0
+    for lnum in range(curr_vis_line_start, curr_vis_line_end)
+        let llen = strwidth(getline(lnum))
+        if llen > 0
+            let sum += llen / 2.0
+            let non_empty_nlines += 1
+        endif
+    endfor
+
+    let content_center = sum / non_empty_nlines
+    return content_center
+endfunc
