@@ -6,7 +6,7 @@ func! focus_side#focusSide(...)
 
     let buffers_orig = tabpagebuflist()
     let curr_buffer = bufnr()
-    let right_width = float2nr(floor(g:focus_side_ratio*str2float(&columns)))
+    let right_width = focus_side#utils#get_width_active_window()
     let right_height = &lines - &cmdheight - 1 - ((tabpagenr('$') > 1) ? 1 : 0)
     let curr_width = winwidth(0)
     let curr_height = winheight(0)
@@ -42,8 +42,8 @@ func! focus_side#focusSide(...)
                 \ && len(bufs) > 1
                 \ && len(bufs) >= (-1*opts['toggle_offset'])
                 \ && curr_buff_index == (len(bufs) - 1)
-                \ && curr_width == right_width
                 \ && curr_height == right_height
+                \ && curr_width == right_width
 
             if toggle_enable
                 let curr_buffer = bufs[opts['toggle_offset']]

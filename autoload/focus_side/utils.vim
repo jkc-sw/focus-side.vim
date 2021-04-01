@@ -1,12 +1,16 @@
 
 func! focus_side#utils#arg_check()
-    if !exists('g:focus_side_ratio')
-        let g:focus_side_ratio = 0.6
+    if !exists('g:focus_side_max_width_ratio')
+        let g:focus_side_max_width_ratio = 0.6
     endif
-    if g:focus_side_ratio > 1
-        let g:focus_side_ratio = 1
-    elseif g:focus_side_ratio < 0
-        let g:focus_side_ratio = 0
+    if g:focus_side_max_width_ratio > 1
+        let g:focus_side_max_width_ratio = 1
+    elseif g:focus_side_max_width_ratio < 0
+        let g:focus_side_max_width_ratio = 0
+    endif
+
+    if !exists('g:focus_side_ratio_strategy')
+        let g:focus_side_ratio_strategy = 'focus_side#ratio_strategy#fixed#get_width_active_window'
     endif
 
     if !exists('g:focus_side_max_windows')
@@ -38,24 +42,15 @@ func! focus_side#utils#resize_active_window(width)
     silent exec 'vertical resize '.a:width
 endfunc
 
-func! focus_side#utils#target_offset_active_window()
+func! focus_side#utils#get_width_active_window()
     let screen_width = str2float(&columns)
-    let screen_height = &lines - &cmdheight - 1 - ((tabpagenr('$') > 1) ? 1 : 0)
-    let screen_center = float2nr(screen_width / 2.0)
-
-    let curr_vis_line_start = line('w0')
-    let curr_vis_line_end = line('w$')
-
-    let sum = 0.0
-    let non_empty_nlines = 0
-    for lnum in range(curr_vis_line_start, curr_vis_line_end)
-        let llen = strwidth(getline(lnum))
-        if llen > 0
-            let sum += llen / 2.0
-            let non_empty_nlines += 1
-        endif
-    endfor
-
-    let content_center = sum / non_empty_nlines
-    return content_center
+    let max_width = floor(g:focus_side_max_width_ratio * screen_width)
+    let desired = function(g:focus_side_ratio_strategy)()
+    if desired > max_width
+        return float2nr(max_width)
+    else
+        return float2nr(desired)
+    endif
 endfunc
+
+" let screen_height = &lines - &cmdheight - 1 - ((tabpagenr('$') > 1) ? 1 : 0)
