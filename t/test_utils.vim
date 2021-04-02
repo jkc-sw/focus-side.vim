@@ -57,3 +57,35 @@ func! s:Test_opt_check()
 endfunc
 call testify#it('Option are checked as expected', function('s:Test_opt_check'))
 
+func! s:Test_get_not_content_width()
+    set signcolumn=no
+    set norelativenumber
+    set nonumber
+    set foldcolumn=0
+    call testify#assert#equals(focus_side#utils#get_not_content_width(), 0)
+
+    set signcolumn=yes
+    set norelativenumber
+    set nonumber
+    set foldcolumn=0
+    call testify#assert#equals(focus_side#utils#get_not_content_width(), 2)
+
+    set signcolumn=yes:3
+    set norelativenumber
+    set nonumber
+    set foldcolumn=0
+    call testify#assert#equals(focus_side#utils#get_not_content_width(), 6)
+
+    set signcolumn=no
+    set relativenumber
+    set nonumber
+    set foldcolumn=0
+    call testify#assert#equals(focus_side#utils#get_not_content_width(), &numberwidth)
+
+    set signcolumn=no
+    set norelativenumber
+    set number
+    set foldcolumn=0
+    call testify#assert#equals(focus_side#utils#get_not_content_width(), &numberwidth)
+endfunc
+call testify#it('knows how many columns are not for content', function('s:Test_get_not_content_width'))

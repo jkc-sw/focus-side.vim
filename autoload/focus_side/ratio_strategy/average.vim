@@ -17,5 +17,5 @@ func! focus_side#ratio_strategy#average#get_width_active_window()
     let content_width = (non_empty_nlines == 0) ? 0 : floor(sum / non_empty_nlines)
     let target_width = 0.5*(screen_width + content_width)
 
-    return float2nr(target_width)
+    return float2nr(target_width) + focus_side#utils#get_not_content_width()
 endfunc
