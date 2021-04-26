@@ -13,6 +13,10 @@ func! focus_side#utils#arg_check()
         let g:focus_side_ratio_strategy = 'focus_side#ratio_strategy#fixed#get_width_active_window'
     endif
 
+    if !exists('g:focus_side_enabled')
+        let g:focus_side_enabled = v:true
+    endif
+
     if !exists('g:focus_side_max_windows')
         let g:focus_side_max_windows = 3
     endif

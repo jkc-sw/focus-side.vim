@@ -1,8 +1,11 @@
 
 func! focus_side#focusSide(...)
-
     call focus_side#utils#arg_check()
     let opts = focus_side#utils#opt_check((a:0 > 0) ? a:1 : {})
+
+    if !g:focus_side_enabled
+        return
+    endif
 
     let buffers_orig = tabpagebuflist()
     let curr_buffer = bufnr()
